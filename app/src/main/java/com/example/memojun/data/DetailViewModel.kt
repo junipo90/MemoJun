@@ -1,10 +1,15 @@
 package com.example.memojun.data
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.memojun.AlarmTool
 import io.realm.Realm
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 class DetailViewModel : ViewModel() {
@@ -47,7 +52,7 @@ class DetailViewModel : ViewModel() {
         memoLiveData.value = memoData
     }
 
-    fun deleteLacation(){
+    fun deleteLocation(){
         memoData.latitude = 0.0
         memoData.longitude = 0.0
         memoLiveData.value = memoData
@@ -57,7 +62,40 @@ class DetailViewModel : ViewModel() {
         memoData.latitude = latitude
         memoData.longitude = longtitude
         memoLiveData.value = memoData
+    }
 
+    fun deleteWeather(){
+        memoData.weather = ""
+        memoLiveData.value = memoData
+    }
+
+    fun setWeather(latitude: Double, longtitude: Double){
+        viewModelScope.launch {
+            memoData.weather = WeatherData.getCurrentWeather(latitude, longtitude)
+            memoLiveData.value = memoData
+        }
+    }
+
+    fun setImageFile(context: Context,bitmap: Bitmap){
+        val imageFile = File(
+            context.getDir("image", Context.MODE_PRIVATE),
+            memoData.id + ".jpg")
+
+        if (imageFile.exists()) imageFile.delete()
+
+        try {
+            imageFile.createNewFile()
+            val outputStream = FileOutputStream(imageFile)
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            outputStream.close()
+
+            memoData.imageFile = memoData.id + ".jpg"
+            memoLiveData.value = memoData
+        }
+        catch (e: Exception) {
+            println(e)
+        }
     }
 
     fun addOrUpdateMemo(context: Context) {

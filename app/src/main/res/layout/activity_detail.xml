@@ -29,12 +29,20 @@
                     android:layout_height="match_parent" android:id="@+id/infoLayout"
                     app:layout_collapseMode="parallax">
 
+                <ImageView android:layout_width="match_parent" android:layout_height="match_parent"
+                           android:id="@+id/bgImage"
+                           android:scaleType="centerCrop"
+                           android:alpha="0.5" app:layout_constraintTop_toTopOf="parent"
+                           app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintBottom_toBottomOf="parent"/>
+
+
                 <com.example.memojun.AlarmInfoView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/alarmInfoView"
                         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="24dp" android:layout_marginLeft="24dp"
+                        android:layout_marginTop="8dp" android:layout_marginLeft="24dp"
                         android:layout_marginStart="24dp">
                 </com.example.memojun.AlarmInfoView>
                 <com.example.memojun.LocationInfoView
@@ -45,6 +53,14 @@
                         android:layout_marginLeft="24dp" android:layout_marginStart="24dp"
                         app:layout_constraintTop_toBottomOf="@+id/alarmInfoView">
                 </com.example.memojun.LocationInfoView>
+                <com.example.memojun.WeatherInfoView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/weatherInfoView"
+                        app:layout_constraintTop_toBottomOf="@+id/locationInfoView"
+                        app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="24dp"
+                        android:layout_marginStart="24dp">
+                </com.example.memojun.WeatherInfoView>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
