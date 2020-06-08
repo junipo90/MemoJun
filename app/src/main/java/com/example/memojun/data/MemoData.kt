@@ -1,8 +1,11 @@
 package com.example.memojun.data
 
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 import java.util.*
 
-class MemoData(
+open class MemoData(
+    @PrimaryKey
     var id: String = UUID.randomUUID().toString(),  // 메모의 고유 ID
     var createdAt: Date = Date(),                   // 작성 시간
     var title: String = "",                         // 제목
@@ -13,4 +16,4 @@ class MemoData(
     var longitude: Double = 0.0,                    // 경도
     var alarmTime: Date = Date(),                   // 알람 시간
     var weather: String = ""                        // 날씨
-    )
+    ):RealmObject()

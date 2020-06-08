@@ -8,12 +8,19 @@ import com.example.memojun.R
 import kotlinx.android.synthetic.main.item_memo.view.*
 import java.text.SimpleDateFormat
 
-class MemoListAdapter(private val list: MutableList<MemoData>) :RecyclerView.Adapter<ItemViewHolder>(){
+class MemoListAdapter(private val list: MutableList<MemoData>) : RecyclerView.Adapter<ItemViewHolder>() {
 
     private val dateFormat = SimpleDateFormat("MM//dd HH:mm")
+    lateinit var itemClickListener: (itemId: String) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_memo, parent, false)
+        view.setOnClickListener {
+            itemClickListener?.run {
+                val memoId = it.tag as String
+                this(memoId)
+            }
+        }
         return ItemViewHolder(view)
     }
 
@@ -22,13 +29,14 @@ class MemoListAdapter(private val list: MutableList<MemoData>) :RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        if (list[position].title.isNotEmpty()){
+        if (list[position].title.isNotEmpty()) {
             holder.containerView.titleView.visibility = View.VISIBLE
             holder.containerView.titleView.text = list[position].title
-        }else{
+        } else {
             holder.containerView.titleView.visibility = View.GONE
         }
         holder.containerView.summaryView.text = list[position].summary
         holder.containerView.dataView.text = dateFormat.format(list[position].createdAt)
+        holder.containerView.tag = list[position].id
     }
 }

@@ -1,5 +1,6 @@
 package com.example.memojun
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -46,6 +47,11 @@ class MemoListFragment : Fragment() {
                 memoListView.layoutManager =
                     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 memoListView.adapter = listAdapter
+                listAdapter.itemClickListener = {
+                    val intent = Intent(activity, DetailActivity::class.java)
+                    intent.putExtra("MEMO_ID", it)
+                    startActivity(intent)
+                }
             }
             it.memoLiveData.observe(this,
                 Observer {
@@ -53,5 +59,10 @@ class MemoListFragment : Fragment() {
                 }
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listAdapter.notifyDataSetChanged()
     }
 }

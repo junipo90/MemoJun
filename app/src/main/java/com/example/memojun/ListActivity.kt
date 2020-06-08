@@ -22,16 +22,11 @@ class ListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener {
-//            val intent = Intent(applicationContext, DetailActivity::class.java)
-//            startActivity(intent)
-            viewModel!!.let {
-                var memoData = MemoData()
-                memoData.title = "제목 테스트"
-                memoData.summary = "요약 내용 테스트"
-                memoData.createdAt = Date()
+            val intent = Intent(applicationContext, DetailActivity::class.java)
+            startActivity(intent)
 
-                it.addMemo(memoData)
-            }
+
+
         }
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
