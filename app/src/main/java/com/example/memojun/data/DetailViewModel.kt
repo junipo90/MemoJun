@@ -8,11 +8,16 @@ import io.realm.Realm
 import java.util.*
 
 class DetailViewModel : ViewModel() {
-    val title: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
-    val content: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
-    val alarmTime: MutableLiveData<Date> = MutableLiveData<Date>().apply { value = Date(0) }
+//    val title: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
+//    val content: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
+//    val alarmTime: MutableLiveData<Date> = MutableLiveData<Date>().apply { value = Date(0) }
+//
+//    private var memoData = MemoData()
 
-    private var memoData = MemoData()
+    var memoData = MemoData()
+    val memoLiveData: MutableLiveData<MemoData> by lazy {
+        MutableLiveData<MemoData>().apply { value = memoData }
+    }
 
     private val realm: Realm by lazy {
         Realm.getDefaultInstance()
@@ -28,27 +33,39 @@ class DetailViewModel : ViewModel() {
     }
 
     fun loadMemo(id: String) {
-        memoData = memoDao.selectMemo(id)
-        title.value = memoData.title
-        content.value = memoData.content
-        alarmTime.value = memoData.alarmTime
+        memoData = realm.copyFromRealm(memoDao.selectMemo(id))
+        memoLiveData.value = memoData
     }
 
     fun deleteAlarm() {
-        alarmTime.value = Date(0)
+        memoData.alarmTime = Date(0)
+        memoLiveData.value = memoData
     }
 
     fun setAlarm(time: Date) {
-        alarmTime.value = time
+        memoData.alarmTime = time
+        memoLiveData.value = memoData
     }
 
-    fun addOrUpdateMemo(context: Context, title: String, content: String) {
-        val alarmTimeValue = alarmTime.value!!
-        memoDao.addOrUpdateMemo(memoData, title, content, alarmTimeValue)
+    fun deleteLacation(){
+        memoData.latitude = 0.0
+        memoData.longitude = 0.0
+        memoLiveData.value = memoData
+    }
+
+    fun setLocation(latitude:Double, longtitude:Double){
+        memoData.latitude = latitude
+        memoData.longitude = longtitude
+        memoLiveData.value = memoData
+
+    }
+
+    fun addOrUpdateMemo(context: Context) {
+        memoDao.addOrUpdateMemo(memoData)
 
         AlarmTool.deleteAlarm(context, memoData.id)
-        if (alarmTimeValue.after(Date())) {
-            AlarmTool.addAlarm(context, memoData.id, alarmTimeValue)
+        if (memoData.alarmTime.after(Date())) {
+            AlarmTool.addAlarm(context, memoData.id, memoData.alarmTime)
         }
     }
 }

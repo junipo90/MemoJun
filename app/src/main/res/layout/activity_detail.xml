@@ -30,11 +30,21 @@
                     app:layout_collapseMode="parallax">
 
                 <com.example.memojun.AlarmInfoView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/alarmInfoView"
+                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="24dp" android:layout_marginLeft="24dp"
+                        android:layout_marginStart="24dp">
+                </com.example.memojun.AlarmInfoView>
+                <com.example.memojun.LocationInfoView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/locationInfoView"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginLeft="24dp" android:layout_marginStart="24dp"
-                        android:id="@+id/alarmInfoView"/>
+                        app:layout_constraintTop_toBottomOf="@+id/alarmInfoView">
+                </com.example.memojun.LocationInfoView>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
