@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:padding="8dp">
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" android:padding="8dp">
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/ic_alarm" android:id="@+id/typeImage"/>
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_alarm"
+            android:id="@+id/typeImage"
+            android:layout_weight="1"/>
     <TextView
             android:text="TextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/infoText" android:layout_marginLeft="8dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/infoText"
+            android:layout_marginLeft="8dp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
 </LinearLayout>

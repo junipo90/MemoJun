@@ -39,6 +39,7 @@ class MemoDao(private val realm: Realm) {
         }
     }
 
+    // 전체 MemoData 중 alarmTime 이 현재 시간보다 큰 데이터만 가져오는 함수
     fun getActiveAlarms():RealmResults<MemoData>{
         return realm.where(MemoData::class.java)
             .greaterThan("alarmTime", Date())

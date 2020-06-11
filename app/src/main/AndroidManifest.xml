@@ -14,7 +14,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        
+        <!-- 알람 receiver 등록 -->
         <receiver android:name=".AlarmTool"></receiver>
         
         <activity

@@ -16,9 +16,11 @@ class IntroActivity : AppCompatActivity() {
     var runnable: Runnable? = null  // 병렬 실행이 가능한 Thread 를 만들어주는 클래스
 
     companion object {
+        // 권한 요청시 권한 Activity에 전달할 고유 코드(상수) 추가
         private const val REQUEST_LACTION_PERMISSION_CODE = 100
     }
 
+    // manifest에서 선언된 권한이 허용되었는지 체크하는 함수
     private fun checkLocationPermission(): Boolean {
         val fineLocationPermission = ContextCompat.checkSelfPermission(this,
         android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -44,9 +46,11 @@ class IntroActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        // 권한이 있으면 activity 이동
         if (checkLocationPermission()){
             moveListActivity()
         }else{
+            // 권한이 없다면 권한 신청
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)){
                 Toast.makeText(this,

@@ -13,11 +13,6 @@ import java.io.FileOutputStream
 import java.util.*
 
 class DetailViewModel : ViewModel() {
-//    val title: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
-//    val content: MutableLiveData<String> = MutableLiveData<String>().apply { value = "" }
-//    val alarmTime: MutableLiveData<Date> = MutableLiveData<Date>().apply { value = Date(0) }
-//
-//    private var memoData = MemoData()
 
     var memoData = MemoData()
     val memoLiveData: MutableLiveData<MemoData> by lazy {
@@ -71,27 +66,36 @@ class DetailViewModel : ViewModel() {
         memoLiveData.value = memoData
     }
 
+    // 받아온 좌표 정보를 WeatherData에 넘겨 날씨 정보를 가져와 memoData에 저장
     fun setWeather(latitude: Double, longtitude: Double){
+        // viewModelScope -> ViewModel이 소멸할 때에 맞춰 코루틴을 정지시켜줌
         viewModelScope.launch {
             memoData.weather = WeatherData.getCurrentWeather(latitude, longtitude)
             memoLiveData.value = memoData
         }
     }
 
+    // 이미지를 받아 설정하는 함수
     fun setImageFile(context: Context,bitmap: Bitmap){
+        // 이미지를 저장할 파일 경로를 생성 (내부 저장소 앱 영역 image 폴더에 저장
         val imageFile = File(
+            // context의 getDir함수로 앱데이터 폴더 내의 image라는 하위 폴더 지정
             context.getDir("image", Context.MODE_PRIVATE),
-            memoData.id + ".jpg")
+            memoData.id + ".jpg") // 파일명은 메모id.jpg로 지정
 
+        // 기존에 파일이 있다면 삭제
         if (imageFile.exists()) imageFile.delete()
 
         try {
+            // imageFile 객체에 지정된 경로로 새 파일을 생성함
             imageFile.createNewFile()
-            val outputStream = FileOutputStream(imageFile)
 
+            // FileOutputStream 으로 패러미터로 받은 이미지 데이터를 JPEG으로 압축하여 저장하고 stream 객체를 닫아줌
+            val outputStream = FileOutputStream(imageFile)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
             outputStream.close()
 
+            // 저장이 끝나면 저장한 이미지 이름을 memoData에 갱신함
             memoData.imageFile = memoData.id + ".jpg"
             memoLiveData.value = memoData
         }
@@ -104,6 +108,7 @@ class DetailViewModel : ViewModel() {
     fun addOrUpdateMemo(context: Context) {
         memoDao.addOrUpdateMemo(memoData)
 
+        // 메모와 연결된 기존 알람을 삭제하고 새 알람시간이 현재시간 이후라면 새로 등록해줌
         AlarmTool.deleteAlarm(context, memoData.id)
         if (memoData.alarmTime.after(Date())) {
             AlarmTool.addAlarm(context, memoData.id, memoData.alarmTime)
