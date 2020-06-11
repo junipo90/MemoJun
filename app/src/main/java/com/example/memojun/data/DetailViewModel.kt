@@ -24,6 +24,7 @@ class DetailViewModel : ViewModel() {
         MutableLiveData<MemoData>().apply { value = memoData }
     }
 
+    // Realm 인스턴스와 memoDao 를 초기화하고 realm 을 닫아줌
     private val realm: Realm by lazy {
         Realm.getDefaultInstance()
     }
@@ -37,6 +38,7 @@ class DetailViewModel : ViewModel() {
         realm.close()
     }
 
+    // 메모를 수정할 때 메모의 id 를 받아와 memoData 를 로드하는 함수
     fun loadMemo(id: String) {
         memoData = realm.copyFromRealm(memoDao.selectMemo(id))
         memoLiveData.value = memoData
@@ -98,6 +100,7 @@ class DetailViewModel : ViewModel() {
         }
     }
 
+    // 메모 추가나 수정시 사용하기 위해 MemoDao 와 기능 연결
     fun addOrUpdateMemo(context: Context) {
         memoDao.addOrUpdateMemo(memoData)
 

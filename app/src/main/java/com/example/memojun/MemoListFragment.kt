@@ -53,6 +53,7 @@ class MemoListFragment : Fragment() {
                 memoListView.layoutManager =
                     LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 memoListView.adapter = listAdapter
+                // ListAdapter 의 itemClickListener 에서 DetailActivity 로 이동 + 메모 id 전달
                 listAdapter.itemClickListener = {
                     val intent = Intent(activity, DetailActivity::class.java)
                     intent.putExtra("MEMO_ID", it)
@@ -69,6 +70,7 @@ class MemoListFragment : Fragment() {
         }
     }
 
+    // 메모를 작성하고 돌아왔을 때 리스트가 갱신 되도록 함
     override fun onResume() {
         super.onResume()
         listAdapter.notifyDataSetChanged()

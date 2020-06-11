@@ -13,11 +13,14 @@ class MemoListAdapter(private val list: MutableList<MemoData>) : RecyclerView.Ad
 
     // Data 객체를 사람이 볼 수 있는 문자열로 만들기 위한 객체
     private val dateFormat = SimpleDateFormat("MM/dd HH:mm")
+
+    // itemClickListener 용 변수
     lateinit var itemClickListener: (itemId: String) -> Unit
 
     // item_memo 를 불러 ViewHolder 를 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_memo, parent, false)
+        // 아이템이 클릭될 때 view 의 tag 에서 메모 id 를 받아서 리스너에서 넘김
         view.setOnClickListener {
             itemClickListener?.run {
                 val memoId = it.tag as String
@@ -47,6 +50,7 @@ class MemoListAdapter(private val list: MutableList<MemoData>) : RecyclerView.Ad
         holder.containerView.summaryView.text = list[position].summary
         // 작성 시간은 dataFormat 으로 변환하여 dataView 에 표시
         holder.containerView.dataView.text = dateFormat.format(list[position].createdAt)
+        // 아이템 view 에 메모의 id 를 설정해줌
         holder.containerView.tag = list[position].id
     }
 }

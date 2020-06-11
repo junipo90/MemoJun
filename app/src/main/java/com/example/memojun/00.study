@@ -18,3 +18,34 @@ View 가 매번 변수를 가져와 참조 하지 않게
 LiveData 가 다른 class 타입의 객체를 value 내부 속성에 담아 놓고
 Observer 를 연결해 두면 갱신 될 때 마다 Observer 에 반환
 
+
+    Realm DB
+
+RealmObject 를 상속 받아 클래스에 사용할 필드를 생성 -> MemoData
+Realm.getDefaultInstance() -> Realm 의 인스턴스를 생성
+실제로 사용할 DB 의 인스턴스 생 (프로젝트 내의 RealmObject 들을 자동으로 참조)
+
+val realm = Realm.getInstance()
+
+realm.where(MemoData::class.java)   -> 쿼리할 대상이 되는 RealmObject 지정 (내부적으로는 테이블)
+     .equalTo("A", "a")
+     .and()                         -> 쿼리에 필요한 검색 조건 (조건이 없는 경우 모든 값을 가져옴)
+     .notEqualTo("B", "b")
+     .findAll()                     -> 쿼리의 모든 값을 받아 오는 함수 (RealmResults 자료형)
+                                       RealmResults : DB 의 값이 바뀌면 자동으로 업데이트 실시간 동기화
+
+RealmObject 객체의 두가지 형태
+ - DB 에 요청한 쿼리 결과 : Managed 상태 -> 값을 수정하면 즉시 반영 됨
+ - 클래스의 객체로 생성   : Unmanaged 상태 -> DB 에 추가하여 Managed 상태가 되면 값이 적용 됨
+
+ Unmanaged RealmObject 를 DB 에 추가하는 방법
+ realm.copyToRealm(realmObject)
+
+ Managed RealmObject 를 DB 에서 삭제하는 방법
+ realmObject.deleteFromRealm()
+
+ DAO 만들어서 DB 에 직접 접근하는 대신 필요한 쿼리를 미리 함수로 작성
+
+
+
+

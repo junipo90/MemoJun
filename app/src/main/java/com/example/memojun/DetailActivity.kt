@@ -40,6 +40,7 @@ import java.util.*
 
 class DetailActivity : AppCompatActivity() {
 
+    // DetailViewModel 을 위한 변수
     private var viewModel: DetailViewModel? = null
     private var dialogCalender = Calendar.getInstance()
 
@@ -78,11 +79,12 @@ class DetailActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_IMAGE)
         }
 
+        // ViewModel 생성
         viewModel = application!!.let {
             ViewModelProvider(viewModelStore, ViewModelProvider.AndroidViewModelFactory(it))
                 .get(DetailViewModel::class.java)
         }
-
+        // ViewModel 에 observe 를 걸어 화면 갱신
         viewModel!!.memoLiveData.observe(this, Observer {
             supportActionBar?.title = it.title
             contentEdit.setText(it.content)
@@ -97,18 +99,24 @@ class DetailActivity : AppCompatActivity() {
             bgImage.setImageURI(imageFile.toUri())
         })
 
+        // ListActivity 에서 아이템을 선택 했을 때 보내주는 메모 id로 데이터를 로드
         val memoId = intent.getStringExtra("MEMO_ID")
+        // 새로 작성할 때는 메모 id가 없어 루틴 작동 안함
         if (memoId != null) {
             viewModel!!.loadMemo(memoId)
         }
 
+        // 툴바를 누르면 제목 작성
         toolbar_layout.setOnClickListener {
+            // LayoutInflater 로 레이아웃 xml 을 view 로 변환
             val view = LayoutInflater.from(this).inflate(R.layout.dialog_title, null)
+            // view 에 포함된 titleEdit 을 변수에 담음
             val titleEdit = view.findViewById<EditText>(R.id.titleEdit)
 
+            // 다이얼로그 창 제작
             AlertDialog.Builder(this)
                 .setTitle("제목을 입력하세요")
-                .setView(view)
+                .setView(view)  // 다이얼로그 내용이 되는 view 설정
                 .setNegativeButton("취소", null)
                 .setPositiveButton("확인", DialogInterface.OnClickListener { dialog, which ->
                     supportActionBar?.title = titleEdit.text.toString()
@@ -146,9 +154,11 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    // 뒤로가기를 눌렀을 때 동작하는 함수
     override fun onBackPressed() {
         super.onBackPressed()
 
+        // viewModel 의 addOrUpdateMemo 함수 호출해 메모 DB 갱신
         viewModel?.addOrUpdateMemo(this)
     }
 
