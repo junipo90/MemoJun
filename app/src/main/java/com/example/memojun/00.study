@@ -1,0 +1,20 @@
+
+    ViewModel
+
+View - ViewModel - Model : MVVM
+
+- View 의 각종 이벤트를 처리
+- View 에 갱신 할 변수 관리
+
+Activity 나 Fragment 의 Lifecycle 과 연동하여 생성 및 소멸
+
+특정 Activity 에 포함 된 모든 Fragment 가 같은 ViewModel 을 참조 하면
+손쉽게 Activity 와 Fragment 의 데이터를 공유 가능
+
+
+    LiveData
+
+View 가 매번 변수를 가져와 참조 하지 않게
+LiveData 가 다른 class 타입의 객체를 value 내부 속성에 담아 놓고
+Observer 를 연결해 두면 갱신 될 때 마다 Observer 에 반환
+
